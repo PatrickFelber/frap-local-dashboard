@@ -5,6 +5,9 @@ import { Header } from './components/Header'
 import { DeviceCard } from './components/DeviceCard'
 
 const ALL = 'All'
+const SWITCH_TYPES = ['switch', 'dimmer', 'rgb']
+
+const byName = (a, b) => a.name.localeCompare(b.name)
 
 export default function App() {
   const { messages, status, publish } = useMqtt(devices)
@@ -15,11 +18,33 @@ export default function App() {
 
   const tabs = [ALL, ...rooms]
 
-  const visibleDevices = useMemo(() => {
-    const SWITCH_TYPES = ['switch', 'dimmer', 'rgb']
-    return (activeRoom === ALL ? devices : devices.filter(d => d.room === activeRoom))
-      .filter(d => d.type === 'sensor' ? showSensors : showSwitches || !SWITCH_TYPES.includes(d.type))
-  }, [activeRoom, showSwitches, showSensors])
+  const filtered = useMemo(() =>
+    devices.filter(d => d.type === 'sensor' ? showSensors : showSwitches),
+    [showSwitches, showSensors],
+  )
+
+  // For the All view: list of { room, devices } in rooms order, alphabetical within
+  const groupedSections = useMemo(() => {
+    if (activeRoom !== ALL) return null
+    return rooms
+      .map(room => ({ room, devices: filtered.filter(d => d.room === room).sort(byName) }))
+      .filter(s => s.devices.length > 0)
+  }, [activeRoom, filtered])
+
+  // For single-room view: flat sorted list
+  const flatDevices = useMemo(() => {
+    if (activeRoom === ALL) return null
+    return filtered.filter(d => d.room === activeRoom).sort(byName)
+  }, [activeRoom, filtered])
+
+  const renderCard = (device) => (
+    <DeviceCard
+      key={device.id}
+      device={device}
+      state={messages[device.topic]}
+      publish={publish}
+    />
+  )
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col select-none">
@@ -51,18 +76,24 @@ export default function App() {
         </div>
       </div>
 
-      {/* Device grid */}
-      <main className="flex-1 p-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 max-w-5xl mx-auto">
-          {visibleDevices.map(device => (
-            <DeviceCard
-              key={device.id}
-              device={device}
-              state={messages[device.topic]}
-              publish={publish}
-            />
-          ))}
-        </div>
+      <main className="flex-1 p-4 max-w-5xl mx-auto w-full">
+        {groupedSections
+          ? groupedSections.map(({ room, devices: roomDevices }) => (
+              <section key={room} className="mb-6">
+                <h2 className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-3 px-1">
+                  {room}
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {roomDevices.map(renderCard)}
+                </div>
+              </section>
+            ))
+          : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                {flatDevices.map(renderCard)}
+              </div>
+            )
+        }
       </main>
     </div>
   )
