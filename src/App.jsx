@@ -10,17 +10,26 @@ export default function App() {
   const { messages, status, publish } = useMqtt(devices)
 
   const [activeRoom, setActiveRoom] = useState(ALL)
+  const [showSwitches, setShowSwitches] = useState(true)
+  const [showSensors, setShowSensors] = useState(true)
 
   const tabs = [ALL, ...rooms]
 
-  const visibleDevices = useMemo(
-    () => (activeRoom === ALL ? devices : devices.filter(d => d.room === activeRoom)),
-    [activeRoom],
-  )
+  const visibleDevices = useMemo(() => {
+    const SWITCH_TYPES = ['switch', 'dimmer', 'rgb']
+    return (activeRoom === ALL ? devices : devices.filter(d => d.room === activeRoom))
+      .filter(d => d.type === 'sensor' ? showSensors : showSwitches || !SWITCH_TYPES.includes(d.type))
+  }, [activeRoom, showSwitches, showSensors])
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col select-none">
-      <Header status={status} />
+      <Header
+        status={status}
+        showSwitches={showSwitches}
+        showSensors={showSensors}
+        onToggleSwitches={() => setShowSwitches(v => !v)}
+        onToggleSensors={() => setShowSensors(v => !v)}
+      />
 
       {/* Room tabs */}
       <div className="sticky top-0 z-10 bg-gray-950/95 backdrop-blur-sm border-b border-gray-800/60">

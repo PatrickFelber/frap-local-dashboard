@@ -263,5 +263,4 @@ export const devices = [
 
 
 
-
 ]
