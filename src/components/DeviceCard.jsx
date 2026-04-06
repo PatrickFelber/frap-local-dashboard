@@ -41,7 +41,7 @@ export function DeviceCard({ device, state, publish }) {
       <Component device={device} state={state} publish={publish} />
 
       {lastUpdated && (
-        <p className="text-xs text-gray-700 text-right -mt-1">
+        <p className="text-xs text-gray-500 mt-auto -mb-1">
           {lastUpdated}
         </p>
       )}
