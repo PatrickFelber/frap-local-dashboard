@@ -1,4 +1,22 @@
-import { Lightbulb } from 'lucide-react'
+import {
+  Lightbulb, Fan, Plug, Zap, Thermometer, Droplets,
+  Sun, Wind, Car, Tent, FlashlightIcon, BatteryCharging,
+} from 'lucide-react'
+
+const ICONS = {
+  lightbulb:       Lightbulb,
+  fan:             Fan,
+  plug:            Plug,
+  zap:             Zap,
+  thermometer:     Thermometer,
+  droplets:        Droplets,
+  sun:             Sun,
+  wind:            Wind,
+  car:             Car,
+  tent:            Tent,
+  flashlight:      FlashlightIcon,
+  battery:         BatteryCharging,
+}
 
 export function SwitchDevice({ device, state, publish }) {
   const sk  = device.stateKey ?? 'state'
@@ -6,22 +24,21 @@ export function SwitchDevice({ device, state, publish }) {
   const isOn = state?.[sk] === 'ON'
   const hasState = state !== undefined
 
+  const Icon = ICONS[device.icon] ?? Lightbulb
+
   const toggle = () => publish(cmd, { [sk]: isOn ? 'OFF' : 'ON' })
 
   return (
     <>
-      {/* Header row */}
       <div className="flex items-start justify-between gap-2">
         <span className="text-sm font-medium text-gray-300 leading-tight">{device.name}</span>
-        <Lightbulb
+        <Icon
           size={16}
           strokeWidth={1.75}
           className={`shrink-0 mt-0.5 transition-colors duration-300 ${isOn ? 'text-amber-400' : 'text-gray-600'}`}
-          fill={isOn ? 'currentColor' : 'none'}
         />
       </div>
 
-      {/* Toggle button */}
       <button
         onClick={toggle}
         disabled={!hasState}

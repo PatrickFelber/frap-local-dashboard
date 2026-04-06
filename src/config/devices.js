@@ -15,6 +15,7 @@ export const devices = [
     topic: 'zigbee2mqtt-frap/FRAP - Kofferraum Switch',
     commandTopic: 'zigbee2mqtt-frap/FRAP - Kofferraum Switch/l1/set',
     stateKey: 'state_l1',
+    icon: 'fan'
   },
   {
     id: 'dachluefter',
@@ -24,6 +25,7 @@ export const devices = [
     topic: 'zigbee2mqtt-frap/FRAP - Kofferraum Switch',
     commandTopic: 'zigbee2mqtt-frap/FRAP - Kofferraum Switch/l2/set',
     stateKey: 'state_l2',
+    icon: 'fan'
   },
   {
     id: 'offroad_lights_hl',
@@ -33,6 +35,7 @@ export const devices = [
     topic: 'zigbee2mqtt-frap/FRAP - Offroadleuchten Hinten Switch',
     commandTopic: 'zigbee2mqtt-frap/FRAP - Offroadleuchten Hinten Switch/l1/set',
     stateKey: 'state_l1',
+    icon: 'flashlight'
   },
   {
     id: 'offroad_lights_hr',
@@ -42,5 +45,6 @@ export const devices = [
     topic: 'zigbee2mqtt-frap/FRAP - Offroadleuchten Hinten Switch',
     commandTopic: 'zigbee2mqtt-frap/FRAP - Offroadleuchten Hinten Switch/l2/set',
     stateKey: 'state_l2',
+    icon: 'flashlight'
   }
 ]
