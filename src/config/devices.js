@@ -46,5 +46,14 @@ export const devices = [
     commandTopic: 'zigbee2mqtt-frap/FRAP - Offroadleuchten Hinten Switch/l2/set',
     stateKey: 'state_l2',
     icon: 'flashlight'
-  }
+  },
+  {
+    id: 'cpu_temperature',
+    name: 'CPU Temperatur',
+    room: 'Cockpit',
+    type: 'sensor',
+    topic: 'homeassistant/sensor/frap_raspberry_pi/cpu_temperature/state',
+    payloadKey: 'value',
+    properties: ['value'],
+  },
 ]

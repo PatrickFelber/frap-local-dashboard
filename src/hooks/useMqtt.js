@@ -18,6 +18,10 @@ export function useMqtt(devices) {
 
     clientRef.current = client
 
+    // Build map of topic → payloadKey for devices that publish plain (non-JSON) values
+    const plainTopics = {}
+    devices.forEach(d => { if (d.payloadKey) plainTopics[d.topic] = d.payloadKey })
+
     client.on('connect', () => {
       setStatus('connected')
 
@@ -41,11 +45,16 @@ export function useMqtt(devices) {
     client.on('offline', () => setStatus('disconnected'))
 
     client.on('message', (topic, payload) => {
+      const raw = payload.toString()
       try {
-        const data = JSON.parse(payload.toString())
+        const data = JSON.parse(raw)
         setMessages(prev => ({ ...prev, [topic]: data }))
       } catch {
-        // ignore non-JSON payloads
+        const key = plainTopics[topic]
+        if (key) {
+          const num = Number(raw)
+          setMessages(prev => ({ ...prev, [topic]: { [key]: isNaN(num) ? raw : num } }))
+        }
       }
     })
 
