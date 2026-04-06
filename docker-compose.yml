@@ -1,0 +1,21 @@
+  services:
+    mqtt-ws-proxy:                                                                                                   
+      build: ./mqtt-ws-proxy                                
+      restart: unless-stopped
+      environment:                                                                                                   
+        MQTT_HOST: mosquitto   # Name deines Mosquitto-Containers
+        MQTT_PORT: 1883                                                                                              
+        WS_PORT: 9001                                       
+      ports:                                                                                                         
+        - "9001:9001"                                       
+                                                                                                                     
+    van-dash:
+      build:                                                                                                         
+        context: ./van-dash                                 
+        args:
+          VITE_MQTT_URL: ws://localhost:9001   # aus Tablet-Browser-Sicht
+          VITE_MQTT_USERNAME: xxx                                                                                    
+          VITE_MQTT_PASSWORD: xxx
+      restart: unless-stopped                                                                                        
+      ports:                                                
+        - "80:80"
