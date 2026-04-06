@@ -2,13 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import mqtt from 'mqtt'
 import { mqttConfig } from '../config/devices'
 
-/**
- * Connects to the MQTT broker over WebSockets and manages topic subscriptions.
- *
- * @param {string[]} topics - List of topics to subscribe to on connect.
- * @returns {{ messages: Record<string, object>, status: string, publish: Function }}
- */
-export function useMqtt(topics) {
+export function useMqtt(devices) {
   const [messages, setMessages] = useState({})
   const [status, setStatus] = useState('connecting')
   const clientRef = useRef(null)
@@ -26,14 +20,18 @@ export function useMqtt(topics) {
 
     client.on('connect', () => {
       setStatus('connected')
-      topics.forEach(topic => {
-        client.subscribe(topic, (err, granted) => {
-          if (err) {
-            console.error('[mqtt] subscribe error for:', topic, err)
-          } else {
-            console.log('[mqtt] subscribed:', topic, '→ qos', granted?.[0]?.qos)
-          }
-        })
+
+      // Deduplicate topics (multiple devices can share one topic)
+      const topics = [...new Set(devices.map(d => d.topic))]
+      topics.forEach(topic => client.subscribe(topic))
+
+      // Request initial state from zigbee2mqtt for each controllable device.
+      // Sensors don't support /get and are skipped.
+      devices.forEach(device => {
+        if (device.type === 'sensor') return
+        const getTopic = device.getTopic ?? `${device.topic}/get`
+        const sk = device.stateKey ?? 'state'
+        client.publish(getTopic, JSON.stringify({ [sk]: '' }))
       })
     })
 
@@ -43,12 +41,11 @@ export function useMqtt(topics) {
     client.on('offline', () => setStatus('disconnected'))
 
     client.on('message', (topic, payload) => {
-      console.log('[mqtt] message on:', topic, payload.toString())
       try {
         const data = JSON.parse(payload.toString())
         setMessages(prev => ({ ...prev, [topic]: data }))
       } catch {
-        console.warn('[mqtt] non-JSON payload on:', topic, payload.toString())
+        // ignore non-JSON payloads
       }
     })
 

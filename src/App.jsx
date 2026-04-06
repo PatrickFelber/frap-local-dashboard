@@ -7,8 +7,7 @@ import { DeviceCard } from './components/DeviceCard'
 const ALL = 'All'
 
 export default function App() {
-  const topics = useMemo(() => devices.map(d => d.topic), [])
-  const { messages, status, publish } = useMqtt(topics)
+  const { messages, status, publish } = useMqtt(devices)
 
   const [activeRoom, setActiveRoom] = useState(ALL)
 
