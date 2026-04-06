@@ -1,4 +1,5 @@
 import { Thermometer, Droplets, Battery, DoorOpen, DoorClosed, Activity, Gauge, Sun } from 'lucide-react'
+import { ICONS } from './icons.js'
 
 // Metadata for well-known zigbee2mqtt sensor properties
 const PROP_META = {
@@ -71,8 +72,8 @@ function ContactRow({ value }) {
   )
 }
 
-function PropertyRow({ prop, value }) {
-  const meta = PROP_META[prop]
+function PropertyRow({ prop, value, meta }) {
+  meta = meta?.[prop]
 
   if (!meta) {
     // Unknown property — show key: value as-is
@@ -102,15 +103,19 @@ function PropertyRow({ prop, value }) {
 export function SensorDevice({ device, state }) {
   const properties = device.properties ?? []
   const hasState = state !== undefined
+  const meta = { ...PROP_META, ...device.propertyMeta }
 
   return (
     <>
       {/* Header row */}
       <div className="flex items-start justify-between gap-2">
         <span className="text-sm font-medium text-gray-300 leading-tight">{device.name}</span>
-        <span className="text-xs text-gray-600 font-mono uppercase tracking-widest shrink-0 mt-0.5">
-          sensor
-        </span>
+        {(() => {
+          const Icon = ICONS[device.icon]
+          return Icon
+            ? <Icon size={16} strokeWidth={1.75} className="shrink-0 mt-0.5 text-gray-600" />
+            : <span className="text-xs text-gray-600 font-mono uppercase tracking-widest shrink-0 mt-0.5">sensor</span>
+        })()}
       </div>
 
       {/* Property values */}
@@ -123,7 +128,7 @@ export function SensorDevice({ device, state }) {
             if (raw === undefined) return null
             return prop === 'contact'
               ? <ContactRow key={prop} value={raw} />
-              : <PropertyRow key={prop} prop={prop} value={raw} />
+              : <PropertyRow key={prop} prop={prop} value={raw} meta={meta} />
           })}
         </div>
       )}
