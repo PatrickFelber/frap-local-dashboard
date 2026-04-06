@@ -61,11 +61,11 @@ function ContactRow({ value }) {
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-1.5 text-xs text-gray-500">
         {isOpen
-          ? <DoorOpen size={14} className="text-amber-400" />
+          ? <DoorOpen size={14} className="text-orange-400" />
           : <DoorClosed size={14} className="text-emerald-400" />}
         Door
       </div>
-      <span className={`text-sm font-semibold ${isOpen ? 'text-amber-400' : 'text-emerald-400'}`}>
+      <span className={`text-sm font-semibold ${isOpen ? 'text-orange-400' : 'text-emerald-400'}`}>
         {isOpen ? 'Open' : 'Closed'}
       </span>
     </div>

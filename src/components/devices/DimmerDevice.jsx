@@ -24,7 +24,7 @@ export function DimmerDevice({ device, state, publish }) {
         <Lightbulb
           size={16}
           strokeWidth={1.75}
-          className={`shrink-0 mt-0.5 transition-colors duration-300 ${isOn ? 'text-amber-400' : 'text-gray-600'}`}
+          className={`shrink-0 mt-0.5 transition-colors duration-300 ${isOn ? 'text-forest-400' : 'text-gray-600'}`}
           fill={isOn ? 'currentColor' : 'none'}
           style={isOn ? { opacity: 0.4 + (brightness / 254) * 0.6 } : {}}
         />
@@ -37,7 +37,7 @@ export function DimmerDevice({ device, state, publish }) {
         className={`
           w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95
           ${isOn
-            ? 'bg-amber-400 text-gray-950 hover:bg-amber-300'
+            ? 'bg-forest-400 text-gray-950 hover:bg-forest-300'
             : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'}
           disabled:opacity-40 disabled:cursor-not-allowed
         `}

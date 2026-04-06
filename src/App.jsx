@@ -66,7 +66,7 @@ export default function App() {
               className={`
                 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200
                 ${activeRoom === room
-                  ? 'bg-amber-400 text-gray-950 shadow-lg shadow-amber-400/20'
+                  ? 'bg-forest-400 text-gray-950 shadow-lg shadow-forest-400/20'
                   : 'bg-gray-800/80 text-gray-400 hover:bg-gray-700 hover:text-gray-200 active:scale-95'}
               `}
             >

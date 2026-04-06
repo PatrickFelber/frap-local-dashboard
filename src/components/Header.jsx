@@ -2,7 +2,7 @@ import { Wifi, WifiOff, Loader, Lightbulb, Activity } from 'lucide-react'
 
 const STATUS = {
   connected:    { icon: Wifi,    color: 'text-emerald-400', label: 'Connected' },
-  connecting:   { icon: Loader,  color: 'text-amber-400',   label: 'Connecting…', spin: true },
+  connecting:   { icon: Loader,  color: 'text-forest-400',  label: 'Connecting…', spin: true },
   disconnected: { icon: WifiOff, color: 'text-gray-500',    label: 'Disconnected' },
   error:        { icon: WifiOff, color: 'text-red-400',     label: 'Error' },
 }

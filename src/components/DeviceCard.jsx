@@ -30,12 +30,12 @@ export function DeviceCard({ device, state, publish }) {
     <div
       className={`
         rounded-2xl p-4 border flex flex-col gap-3 transition-all duration-300
-        bg-gray-900
+        bg-forest-900
         ${isSensor
-          ? 'border-gray-800'
+          ? 'border-forest-800/60'
           : isOn
-            ? 'border-amber-900/50 shadow-lg shadow-amber-950/30'
-            : 'border-gray-800'}
+            ? 'border-forest-800 shadow-lg shadow-forest-950/40'
+            : 'border-forest-800/60'}
       `}
     >
       <Component device={device} state={state} publish={publish} />
