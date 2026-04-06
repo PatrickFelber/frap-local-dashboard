@@ -13,7 +13,7 @@ export function Header({ status }) {
 
   return (
     <header className="flex items-center justify-between px-5 py-4 border-b border-gray-800/60">
-      <h1 className="text-lg font-semibold tracking-tight text-gray-100">Van Dash</h1>
+      <h1 className="text-lg font-semibold tracking-tight text-gray-100">FRAP</h1>
       <div className={`flex items-center gap-2 text-sm font-medium ${cfg.color}`}>
         <Icon size={15} strokeWidth={2} className={cfg.spin ? 'animate-spin' : ''} />
         <span>{cfg.label}</span>
